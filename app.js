@@ -5,6 +5,8 @@ const cors = require("cors");
 
 const app = express();
 
+const vote = require('./routes/vote')
+
 // Set public folder
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -14,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Enable CORS
 app.use(cors);
+
+app.use("/vote", vote)
 
 const PORT = 3000;
 
