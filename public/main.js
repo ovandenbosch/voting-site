@@ -54,7 +54,7 @@ if (chartContainer) {
   var channel = pusher.subscribe("candidate-poll");
   channel.bind("candidate-vote", function (data) {
     dataPoints = dataPoints.map((x) => {
-      if (x.label == data.language) {
+      if (x.label == data.candidate) {
         x.y += data.points;
         return x;
       } else {
