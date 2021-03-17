@@ -13,7 +13,6 @@ form.addEventListener("submit", (e) => {
     }),
   })
     .then((res) => res.json())
-    .then((data) => console.log(data))
     .catch((err) => console.log(err));
 
   e.preventDefault();
@@ -24,40 +23,38 @@ fetch("http://localhost:3000/vote")
   .then((data) => {
     let votes = data.votes;
     let totalVotes = votes.length;
-    
+
     // Count points for each candidate - acc = accumulate
-    
-    
+
     let voteCounts = votes.reduce(
       (acc, vote) => (
-        (acc[vote.candidate] = (acc[vote.candidate] || 0) + parseInt(vote.points)), acc
+        (acc[vote.candidate] =
+          (acc[vote.candidate] || 0) + parseInt(vote.points)),
+        acc
       ),
       {}
     );
 
     // Canvas JS implementation
-    let dataPoints = [
-      { label: "Candidate A", y: voteCounts.CandidateA },
-      { label: "Candidate B", y: voteCounts.CandidateB },
-      { label: "Candidate C", y: voteCounts.CandidateC },
+    let dataPointsreal = [
+      { label: "Candidate A", y: voteCounts.CandidateA, id: "CandidateA" },
+      { label: "Candidate B", y: voteCounts.CandidateB, id: "CandidateB" },
+      { label: "Candidate C", y: voteCounts.CandidateC, id: "CandidateC" },
     ];
-    
 
     const chartContainer = document.querySelector("#chartContainer");
 
     if (chartContainer) {
-      
-
-      let chart = new CanvasJS.Chart("chartContainer", {
+      const chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "theme1",
         title: {
-          text: `Total Votes ${totalVotes}`
+          text: "Voting system",
         },
         data: [
           {
             type: "column",
-            dataPoints: dataPoints
+            dataPoints: dataPointsreal,
           },
         ],
       });
@@ -71,14 +68,12 @@ fetch("http://localhost:3000/vote")
       });
 
       var channel = pusher.subscribe("candidate-poll");
-      
+
       channel.bind("candidate-vote", function (data) {
-        dataPoints = dataPoints.map((x) => {
-          if (x.label == data.candidate) {
-            x.y += data.points;
-            return x;
-          } else {
-            return x;
+        dataPointsreal.forEach((point) => {
+          if (point.id == data.candidate) {
+            point.y += data.points;
+            totalVotes += data.points;
           }
         });
         chart.render();
