@@ -1,4 +1,5 @@
 const form = document.getElementById("vote-form");
+var event
 
 // Form submit event
 form.addEventListener("submit", (e) => {
@@ -23,10 +24,19 @@ fetch("http://localhost:3000/vote")
   .then((data) => {
     let votes = data.votes;
     let totalVotes = votes.length;
+    document.querySelector(
+      "#chartTitle"
+    ).textContent = `Total Votes: ${totalVotes}`;
+
+    let voteCounts = {
+      CandidateA: 0,
+      CandidateB: 0,
+      CandidateC: 0,
+    };
 
     // Count points for each candidate - acc = accumulate
 
-    let voteCounts = votes.reduce(
+    voteCounts = votes.reduce(
       (acc, vote) => (
         (acc[vote.candidate] =
           (acc[vote.candidate] || 0) + parseInt(vote.points)),
@@ -45,6 +55,13 @@ fetch("http://localhost:3000/vote")
     const chartContainer = document.querySelector("#chartContainer");
 
     if (chartContainer) {
+      // Listen for vote event
+      document.addEventListener("votesAdded", function (e) {
+        document.querySelector(
+          "#chartTitle"
+        ).textContent = `Total Votes: ${e.detail.totalVotes}`;
+      });
+
       const chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "theme1",
@@ -71,10 +88,15 @@ fetch("http://localhost:3000/vote")
 
       channel.bind("candidate-vote", function (data) {
         dataPointsreal.forEach((point) => {
-          if (point.id == data.candidate) {
+          if (point.id == data.candidate) 
+          {
             point.y += data.points;
             totalVotes += data.points;
-          }
+            event = new CustomEvent('votesAdded',{detail:{totalVotes:totalVotes}});
+            // Dispatch
+            document.dispatchEvent(event)
+            }
+          
         });
         chart.render();
       });
