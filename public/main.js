@@ -24,11 +24,20 @@ fetch("http://localhost:3000/vote")
   .then((data) => {
     const votes = data.votes;
     const totalVotes = votes.length;
+    document.querySelector(
+      "#chartTitle"
+    ).textContent = `Total Votes: ${totalVotes}`;
     // Count points for each candidate - acc = accumulate
-    const voteCounts = votes.reduce(
+    let voteCounts = {
+      CandidateA: 0,
+      CandidateB: 0,
+      CandidateC: 0
+    }
+    
+    voteCounts = votes.reduce(
       (acc, vote) => (
-        acc[vote.candidate] =
-          (acc[vote.candidate] || 0) + parseInt(vote.points),
+        (acc[vote.candidate] =
+          (acc[vote.candidate] || 0) + parseInt(vote.points)),
         acc
       ),
       {}
@@ -38,18 +47,23 @@ fetch("http://localhost:3000/vote")
     let dataPoints = [
       { label: "Candidate A", y: voteCounts.CandidateA },
       { label: "Candidate B", y: voteCounts.CandidateB },
-      { label: "Candidate C", y: voteCounts.CandidateC }
+      { label: "Candidate C", y: voteCounts.CandidateC },
     ];
 
     const chartContainer = document.querySelector("#chartContainer");
 
     if (chartContainer) {
+      // Listen for the event.
+      document.addEventListener("votesAdded", function (e) {
+        document.querySelector(
+          "#chartTitle"
+        ).textContent = `Total Votes: ${e.detail.totalVotes}`;
+      });
+
       const chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "theme1",
-        title: {
-          text: "Vote Results",
-        },
+
         data: [
           {
             type: "column",
@@ -60,7 +74,7 @@ fetch("http://localhost:3000/vote")
       chart.render();
 
       // Enable pusher logging - don't include this in production
-      Pusher.logToConsole = true;
+      Pusher.logToConsole = false;
 
       var pusher = new Pusher("c05df0740880d4b1eee9", {
         cluster: "us2",
