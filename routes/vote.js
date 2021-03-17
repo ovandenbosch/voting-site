@@ -20,7 +20,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   const newVote = {
     candidate: req.body.candidate,
-    points: 1,
+    points: 1
   };
 
   new Vote(newVote).save().then((vote) => {

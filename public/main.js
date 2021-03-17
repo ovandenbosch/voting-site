@@ -22,23 +22,15 @@ form.addEventListener("submit", (e) => {
 fetch("http://localhost:3000/vote")
   .then((res) => res.json())
   .then((data) => {
-    const votes = data.votes;
-    const totalVotes = votes.length;
-    document.querySelector(
-      "#chartTitle"
-    ).textContent = `Total Votes: ${totalVotes}`;
-    // Count points for each candidate - acc = accumulate
-    let voteCounts = {
-      CandidateA: 0,
-      CandidateB: 0,
-      CandidateC: 0
-    }
+    let votes = data.votes;
+    let totalVotes = votes.length;
     
-    voteCounts = votes.reduce(
+    // Count points for each candidate - acc = accumulate
+    
+    
+    let voteCounts = votes.reduce(
       (acc, vote) => (
-        (acc[vote.candidate] =
-          (acc[vote.candidate] || 0) + parseInt(vote.points)),
-        acc
+        (acc[vote.candidate] = (acc[vote.candidate] || 0) + parseInt(vote.points)), acc
       ),
       {}
     );
@@ -49,38 +41,37 @@ fetch("http://localhost:3000/vote")
       { label: "Candidate B", y: voteCounts.CandidateB },
       { label: "Candidate C", y: voteCounts.CandidateC },
     ];
+    
 
     const chartContainer = document.querySelector("#chartContainer");
 
     if (chartContainer) {
-      // Listen for the event.
-      document.addEventListener("votesAdded", function (e) {
-        document.querySelector(
-          "#chartTitle"
-        ).textContent = `Total Votes: ${e.detail.totalVotes}`;
-      });
+      
 
-      const chart = new CanvasJS.Chart("chartContainer", {
+      let chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
         theme: "theme1",
-
+        title: {
+          text: `Total Votes ${totalVotes}`
+        },
         data: [
           {
             type: "column",
-            dataPoints: dataPoints,
+            dataPoints: dataPoints
           },
         ],
       });
       chart.render();
 
       // Enable pusher logging - don't include this in production
-      Pusher.logToConsole = false;
+      Pusher.logToConsole = true;
 
       var pusher = new Pusher("c05df0740880d4b1eee9", {
         cluster: "us2",
       });
 
       var channel = pusher.subscribe("candidate-poll");
+      
       channel.bind("candidate-vote", function (data) {
         dataPoints = dataPoints.map((x) => {
           if (x.label == data.candidate) {
