@@ -16,9 +16,9 @@ router.get("/", (req, res) => {
 });
 // Can == candidate in voting terms
 router.post("/", (req, res) => {
-  pusher.trigger("language-poll", "language-vote", {
-    points: 1,
-    can: req.body.can,
+  pusher.trigger("candidate-poll", "candidate-vote", {
+    candidate: req.body.candidate,
+    points: 1
   });
 
   return res.json({ success: true, message: "Thank you for voting" });
