@@ -19,48 +19,69 @@ form.addEventListener("submit", (e) => {
   e.preventDefault();
 });
 
-// Canvas JS implementation
-let dataPoints = [
-  { label: "Candidate A", y: 0 },
-  { label: "Candidate B", y: 0 },
-  { label: "Candidate C", y: 0 },
-];
+fetch("http://localhost:3000/vote")
+  .then((res) => res.json())
+  .then((data) => {
+    let votes = data.votes;
+    let totalVotes = votes.length;
+    
+    // Count points for each candidate - acc = accumulate
+    
+    
+    let voteCounts = votes.reduce(
+      (acc, vote) => (
+        (acc[vote.candidate] = (acc[vote.candidate] || 0) + parseInt(vote.points)), acc
+      ),
+      {}
+    );
 
-const chartContainer = document.querySelector("#chartContainer");
+    // Canvas JS implementation
+    let dataPoints = [
+      { label: "Candidate A", y: voteCounts.CandidateA },
+      { label: "Candidate B", y: voteCounts.CandidateB },
+      { label: "Candidate C", y: voteCounts.CandidateC },
+    ];
+    
 
-if (chartContainer) {
-  const chart = new CanvasJS.Chart("chartContainer", {
-    animationEnabled: true,
-    theme: "theme1",
-    title: {
-      text: "Vote Results",
-    },
-    data: [
-      {
-        type: "column",
-        dataPoints: dataPoints,
-      },
-    ],
+    const chartContainer = document.querySelector("#chartContainer");
+
+    if (chartContainer) {
+      
+
+      let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "theme1",
+        title: {
+          text: `Total Votes ${totalVotes}`
+        },
+        data: [
+          {
+            type: "column",
+            dataPoints: dataPoints
+          },
+        ],
+      });
+      chart.render();
+
+      // Enable pusher logging - don't include this in production
+      Pusher.logToConsole = true;
+
+      var pusher = new Pusher("c05df0740880d4b1eee9", {
+        cluster: "us2",
+      });
+
+      var channel = pusher.subscribe("candidate-poll");
+      
+      channel.bind("candidate-vote", function (data) {
+        dataPoints = dataPoints.map((x) => {
+          if (x.label == data.candidate) {
+            x.y += data.points;
+            return x;
+          } else {
+            return x;
+          }
+        });
+        chart.render();
+      });
+    }
   });
-  chart.render();
-
-  // Enable pusher logging - don't include this in production
-  Pusher.logToConsole = true;
-
-  var pusher = new Pusher("c05df0740880d4b1eee9", {
-    cluster: "us2",
-  });
-
-  var channel = pusher.subscribe("candidate-poll");
-  channel.bind("candidate-vote", function (data) {
-    dataPoints = dataPoints.map((x) => {
-      if (x.label == data.language) {
-        x.y += data.points;
-        return x;
-      } else {
-        return x;
-      }
-    });
-    chart.render();
-  });
-}
