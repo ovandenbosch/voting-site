@@ -1,6 +1,13 @@
 const form = document.getElementById("vote-form");
 var event
 
+// Hide chart until submission
+function Showchart() {
+  var div = document.getElementById("titleandchart")
+  div.style.display = "block"
+}
+
+
 // Form submit event
 form.addEventListener("submit", (e) => {
   const choice = document.querySelector("input[name=candidate]:checked").value;

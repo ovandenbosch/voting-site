@@ -42,14 +42,15 @@
           />
           <label for="candidate-c">Candidate C</label>
         </p>
-        <button class="btn waves-effect waves-light" type="submit" value="Vote">
+        <button class="btn waves-effect waves-light" type="submit" value="Vote" onclick="Showchart()">
           Vote
         </button>
       </form>
       <br /><br />
-      
+      <div id=titleandchart style="display: none;">
       <h5 style="text-align: center" id="chartTitle"></h5>
       <div id="chartContainer" style="height: 300px; width: 100%"></div>
+      </div>
     </div>
 
     <script
