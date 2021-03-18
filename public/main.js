@@ -151,6 +151,7 @@ fetch("http://localhost:3000/vote")
         });
         votemessage.style.display = "none";
         // See CSS for disabling of labels
+        chart.render()
       });
     }
   });
