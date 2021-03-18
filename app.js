@@ -9,6 +9,7 @@ require('./config/database')
 // Express 
 const app = express();
 
+
 // Vote object
 const vote = require('./routes/vote')
 

@@ -2,26 +2,28 @@ const form = document.getElementById("vote-form");
 const votechart = document.getElementById("titleandchart");
 const rad_buttons = document.getElementsByName("candidate");
 const error_message = document.getElementById("errormessage");
-const hasvoted = window.localStorage.getItem("voted");
+const hasvoted = window.sessionStorage.getItem("voted");
+const labels = document.getElementsByClassName('label')
 var event;
 
 // Hide chart until submission
 function Showchart() {
   votechart.style.display = "block";
-  window.localStorage.setItem("voted", true);
+  window.sessionStorage.setItem("voted", true);
 }
 
 // Checking if someone has already voted
-if (window.localStorage.getItem("voted") == "true") {
+if (window.sessionStorage.getItem("voted") == "true") {
   votechart.style.display = "block";
   button.className = "btn disabled";
   // Alert message
-  alert("You have already voted!");
   error_message.innerHTML = "You have already voted";
   // Disables all buttons
   rad_buttons.forEach((rad_button) => {
     rad_button.setAttribute("disabled", "disabled");
-  });
+    rad_button.style.cursor = "default"
+  })
+  // See CSS for disabling of labels
 }
 
 // Form submit event

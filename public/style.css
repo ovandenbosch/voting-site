@@ -1,0 +1,4 @@
+[type="radio"]:disabled+label {
+    color: rgba(0,0,0,0.42);
+    cursor: default;
+}
