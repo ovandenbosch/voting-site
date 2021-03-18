@@ -9,8 +9,6 @@ function Showchart() {
 }
 
 const hasvoted = window.localStorage.getItem('voted')
-const button = document.getElementById("button")
-console.log(hasvoted)
 
 if (window.localStorage.getItem('voted') == "true") {
   votechart.style.display = "block"
