@@ -6,8 +6,10 @@ const cors = require("cors");
 // DB Config
 require('./config/database')
 
+// Express 
 const app = express();
 
+// Vote object
 const vote = require('./routes/vote')
 
 // Set public folder

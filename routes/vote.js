@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
 const Vote = require("../models/Vote-model");
 const Pusher = require("pusher");
 
+// Pusher information
 var pusher = new Pusher({
   appId: "1172863",
   key: "c05df0740880d4b1eee9",
@@ -13,10 +13,13 @@ var pusher = new Pusher({
   useTLS: true,
 });
 
+
+// Getting a vote
 router.get("/", (req, res) => {
   Vote.find().then((votes) => res.json({ success: true, votes: votes }));
 });
-// Can == candidate in voting terms
+
+// Posting a vote
 router.post("/", (req, res) => {
   const newVote = {
     candidate: req.body.candidate,
