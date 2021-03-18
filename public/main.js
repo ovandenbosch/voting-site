@@ -8,10 +8,7 @@ const votemessage = document.getElementById("votemessage")
 var event;
 
 // Hide chart until submission
-function Showchart() {
-  votechart.style.display = "block";
-  window.sessionStorage.setItem("voted", true);
-}
+
 
 // Checking if someone has already voted
 if (window.sessionStorage.getItem("voted") == "true") {
@@ -31,8 +28,11 @@ if (window.sessionStorage.getItem("voted") == "true") {
 // Form submit event
 form.addEventListener("submit", (e) => {
   const choice = document.querySelector("input[name=candidate]:checked").value;
+  console.log(choice)
   var yes = confirm(`Are you sure you want to vote for ${choice}`);
   if (yes == true) {
+    window.sessionStorage.setItem("voted", true);
+    votechart.style.display = "block";
     const data = { candidate: choice };
     // What happens if there is a vote
     fetch("http://localhost:3000/vote", {
