@@ -13,11 +13,12 @@
   <body>
     <div class="container">
       <h1>Vote Now!!!</h1>
+      <h5 id="errormessage" style="color: red; font-weight: bold"></h5>
       <p>Vote for your favourite candidate!</p>
       <form id="vote-form">
         <p>
           <input
-          class="buttons"
+            class="awesome"
             type="radio"
             name="candidate"
             id="candidate-a"
@@ -27,7 +28,7 @@
         </p>
         <p>
           <input
-          class="buttons"
+            class="awesome"
             type="radio"
             name="candidate"
             id="candidate-b"
@@ -37,7 +38,7 @@
         </p>
         <p>
           <input
-          class="buttons"
+            class="awesome"
             type="radio"
             name="candidate"
             id="candidate-c"
@@ -45,14 +46,20 @@
           />
           <label for="candidate-c">Candidate C</label>
         </p>
-        <button class="btn waves-effect waves-light" type="submit" value="Vote" onclick="Showchart()" id="button">
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          value="Vote"
+          onclick="Showchart()"
+          id="button"
+        >
           Vote
         </button>
       </form>
       <br /><br />
-      <div id=titleandchart style="display: none;">
-      <h5 style="text-align: center" id="chartTitle"></h5>
-      <div id="chartContainer" style="height: 300px; width: 100%"></div>
+      <div id="titleandchart" style="display: none">
+        <h5 style="text-align: center" id="chartTitle"></h5>
+        <div id="chartContainer" style="height: 300px; width: 100%"></div>
       </div>
     </div>
 
@@ -62,9 +69,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/pusher/7.0.0/pusher.min.js"
-    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher/7.0.0/pusher.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
       integrity="sha512-FJ2OYvUIXUqCcPf1stu+oTBlhn54W0UisZB/TNrZaVMHHhYvLBV9jMbvJYtvDe5x/WVaoXZ6KB+Uqe5hT2vlyA=="
