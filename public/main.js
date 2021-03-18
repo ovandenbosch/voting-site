@@ -3,7 +3,8 @@ const votechart = document.getElementById("titleandchart");
 const rad_buttons = document.getElementsByName("candidate");
 const error_message = document.getElementById("errormessage");
 const hasvoted = window.sessionStorage.getItem("voted");
-const labels = document.getElementsByClassName('label')
+const labels = document.getElementsByClassName("label");
+const votemessage = document.getElementById("votemessage")
 var event;
 
 // Hide chart until submission
@@ -21,31 +22,35 @@ if (window.sessionStorage.getItem("voted") == "true") {
   // Disables all buttons
   rad_buttons.forEach((rad_button) => {
     rad_button.setAttribute("disabled", "disabled");
-    rad_button.style.cursor = "default"
-  })
+    rad_button.style.cursor = "default";
+  });
+  votemessage.style.display = "none"
   // See CSS for disabling of labels
 }
 
 // Form submit event
 form.addEventListener("submit", (e) => {
   const choice = document.querySelector("input[name=candidate]:checked").value;
-  const data = { candidate: choice };
-  // What happens if there is a vote
-  fetch("http://192.168.1.106:3000/vote", {
-    method: "post",
-    body: JSON.stringify(data),
-    headers: new Headers({
-      "Content-Type": "application/json",
-    }),
-  })
-    .then((res) => res.json())
-    .catch((err) => console.log(err));
+  var yes = confirm(`Are you sure you want to vote for ${choice}`);
+  if (yes == true) {
+    const data = { candidate: choice };
+    // What happens if there is a vote
+    fetch("http://localhost:3000/vote", {
+      method: "post",
+      body: JSON.stringify(data),
+      headers: new Headers({
+        "Content-Type": "application/json",
+      }),
+    })
+      .then((res) => res.json())
+      .catch((err) => console.log(err));
 
-  e.preventDefault();
+    e.preventDefault();
+  }
 });
 
 // What happens if there is a vote that needs to be counted
-fetch("http://192.168.1.106:3000/vote")
+fetch("http://localhost:3000/vote")
   .then((res) => res.json())
   .then((data) => {
     let votes = data.votes;
@@ -130,6 +135,18 @@ fetch("http://192.168.1.106:3000/vote")
           }
         });
         chart.render();
+
+        // Disabling stuff because otherwise you can vote again (without realoding the tab)
+        button.className = "btn disabled";
+        // Alert message
+        error_message.innerHTML = "You have now voted";
+        // Disables all buttons
+        rad_buttons.forEach((rad_button) => {
+          rad_button.setAttribute("disabled", "disabled");
+          rad_button.style.cursor = "default";
+        });
+        votemessage.style.display = "none";
+        // See CSS for disabling of labels
       });
     }
   });
