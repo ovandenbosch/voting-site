@@ -28,8 +28,12 @@ if (window.sessionStorage.getItem("voted") == "true") {
 // Form submit event
 form.addEventListener("submit", (e) => {
   const choice = document.querySelector("input[name=candidate]:checked").value;
-  console.log(choice)
+
+  // Confirmation
+
   var yes = confirm(`Are you sure you want to vote for ${choice}`);
+  
+  // Handling vote
   if (yes == true) {
     window.sessionStorage.setItem("voted", true);
     votechart.style.display = "block";
