@@ -1,15 +1,30 @@
 const form = document.getElementById("vote-form");
+const votechart = document.getElementById("titleandchart")
 var event
 
 // Hide chart until submission
 function Showchart() {
-  var div = document.getElementById("titleandchart")
-  div.style.display = "block"
+  votechart.style.display = "block"
+  window.localStorage.setItem('voted', true)
 }
+
+const hasvoted = window.localStorage.getItem('voted')
+const button = document.getElementById("button")
+console.log(hasvoted)
+
+if (window.localStorage.getItem('voted') == "true") {
+  votechart.style.display = "block"
+  button.className = "btn disabled"
+  alert("You have already voted!")
+
+}
+
 
 
 // Form submit event
 form.addEventListener("submit", (e) => {
+  
+  
   const choice = document.querySelector("input[name=candidate]:checked").value;
   const data = { candidate: choice };
 
