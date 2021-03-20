@@ -39,7 +39,7 @@ form.addEventListener("submit", (e) => {
     votechart.style.display = "block";
     const data = { candidate: choice };
     // What happens if there is a vote
-    fetch("http://voteonline.live/vote", {
+    fetch("https://voteonline.live/vote", {
       method: "post",
       body: JSON.stringify(data),
       headers: new Headers({
