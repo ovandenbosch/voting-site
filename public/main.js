@@ -39,7 +39,7 @@ form.addEventListener("submit", (e) => {
     votechart.style.display = "block";
     const data = { candidate: choice };
     // What happens if there is a vote
-    fetch("http://192.168.1.106:3000/vote", {
+    fetch("http://voteonline.live/vote", {
       method: "post",
       body: JSON.stringify(data),
       headers: new Headers({
@@ -54,7 +54,7 @@ form.addEventListener("submit", (e) => {
 });
 
 // What happens if there is a vote that needs to be counted
-fetch("http://192.168.1.106:3000/vote")
+fetch("https://voteonline.live/vote")
   .then((res) => res.json())
   .then((data) => {
     let votes = data.votes;
