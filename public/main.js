@@ -53,8 +53,8 @@ function votefunction() {
       votechart.style.display = "block";
       const data = { candidate: choice };
       // What happens if there is a vote
-      fetch("http://localhost:3000/vote", {
-        // fetch("https://voteonline.live/vote", {
+      // fetch("http://localhost:3000/vote", {
+      fetch("https://voteonline.live/vote", {
         method: "post",
         body: JSON.stringify(data),
         headers: new Headers({
@@ -91,8 +91,8 @@ function votefunction() {
 
 
 // What happens if there is a vote that needs to be counted
-fetch("http://localhost:3000/vote")
-// fetch("https://voteonline.live/vote")
+// fetch("http://localhost:3000/vote")
+fetch("https://voteonline.live/vote")
   .then((res) => res.json())
   .then((data) => {
     let votes = data.votes;
