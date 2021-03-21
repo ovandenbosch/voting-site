@@ -2,16 +2,15 @@ const form = document.getElementById("vote-form");
 const votechart = document.getElementById("titleandchart");
 const rad_buttons = document.getElementsByName("candidate");
 const error_message = document.getElementById("errormessage");
-const hasvoted = window.sessionStorage.getItem("voted");
+const hasvoted = window.localStorage.getItem("voted");
 const labels = document.getElementsByClassName("label");
-const votemessage = document.getElementById("votemessage")
+const votemessage = document.getElementById("votemessage");
 var event;
 
 // Hide chart until submission
 
-
 // Checking if someone has already voted
-if (window.sessionStorage.getItem("voted") == "true") {
+if (window.localStorage.getItem("voted") == "true") {
   votechart.style.display = "block";
   button.className = "btn disabled";
   // Alert message
@@ -21,7 +20,7 @@ if (window.sessionStorage.getItem("voted") == "true") {
     rad_button.setAttribute("disabled", "disabled");
     rad_button.style.cursor = "default";
   });
-  votemessage.style.display = "none"
+  votemessage.style.display = "none";
   // See CSS for disabling of labels
 }
 
@@ -30,12 +29,15 @@ form.addEventListener("submit", (e) => {
   const choice = document.querySelector("input[name=candidate]:checked").value;
 
   // Confirmation
+  // We use this because choice returns CandidateA where as name returns Candidate A
+  // Looks nicer for confirmation
+  const name = document.querySelector("input[name=candidate]:checked")
+    .className;
+  var yes = confirm(`Are you sure you want to vote for ${name}?`);
 
-  var yes = confirm(`Are you sure you want to vote for ${choice}`);
-  
   // Handling vote
   if (yes == true) {
-    window.sessionStorage.setItem("voted", true);
+    window.localStorage.setItem("voted", true);
     votechart.style.display = "block";
     const data = { candidate: choice };
     // What happens if there is a vote
@@ -151,7 +153,7 @@ fetch("https://voteonline.live/vote")
         });
         votemessage.style.display = "none";
         // See CSS for disabling of labels
-        chart.render()
+        chart.render();
       });
     }
   });
