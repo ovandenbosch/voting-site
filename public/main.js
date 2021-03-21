@@ -11,6 +11,11 @@ var event;
 
 // Checking if someone has already voted
 if (window.localStorage.getItem("voted") == "true") {
+  Swal.fire(
+    'You have already voted',
+    '',
+    'info'
+  )
   votechart.style.display = "block";
   button.className = "btn disabled";
   // Alert message
@@ -25,7 +30,7 @@ if (window.localStorage.getItem("voted") == "true") {
 }
 
 // Form submit event
-form.addEventListener("submit", (e) => {
+function votefunction() {
   const choice = document.querySelector("input[name=candidate]:checked").value;
 
   // Confirmation
@@ -33,30 +38,61 @@ form.addEventListener("submit", (e) => {
   // Looks nicer for confirmation
   const name = document.querySelector("input[name=candidate]:checked")
     .className;
-  var yes = confirm(`Are you sure you want to vote for ${name}?`);
+  // Nice pop up using sweetalert
+  Swal.fire({
+    title: `Are you sure you want to vote for ${name}?`,
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
 
-  // Handling vote
-  if (yes == true) {
-    window.localStorage.setItem("voted", true);
-    votechart.style.display = "block";
-    const data = { candidate: choice };
-    // What happens if there is a vote
-    fetch("https://voteonline.live/vote", {
-      method: "post",
-      body: JSON.stringify(data),
-      headers: new Headers({
-        "Content-Type": "application/json",
-      }),
-    })
-      .then((res) => res.json())
-      .catch((err) => console.log(err));
 
-    e.preventDefault();
-  }
-});
+
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire(`You have now voted for ${name}`, '', 'success')
+      window.localStorage.setItem("voted", true);
+      votechart.style.display = "block";
+      const data = { candidate: choice };
+      // What happens if there is a vote
+      fetch("http://localhost:3000/vote", {
+        // fetch("https://voteonline.live/vote", {
+        method: "post",
+        body: JSON.stringify(data),
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      })
+        .then((res) => res.json())
+        .catch((err) => console.log(err));
+
+
+    }
+  })
+
+  // // Handling vote
+  // if (yes) {
+  //   window.localStorage.setItem("voted", true);
+  //   votechart.style.display = "block";
+  //   const data = { candidate: choice };
+  //   // What happens if there is a vote
+  //   fetch("http://localhost:3000/vote", {
+  //   // fetch("https://voteonline.live/vote", {
+  //     method: "post",
+  //     body: JSON.stringify(data),
+  //     headers: new Headers({
+  //       "Content-Type": "application/json",
+  //     }),
+  //   })
+  //     .then((res) => res.json())
+  //     .catch((err) => console.log(err));
+
+  //   e.preventDefault();
+  // }
+}
+
 
 // What happens if there is a vote that needs to be counted
-fetch("https://voteonline.live/vote")
+fetch("http://localhost:3000/vote")
+// fetch("https://voteonline.live/vote")
   .then((res) => res.json())
   .then((data) => {
     let votes = data.votes;
