@@ -8,4 +8,4 @@ https://voteonline.live
 
 Feel free to submit a pull request if you would like to make some meaningful changes.
 
-more commits required
+## Graph
