@@ -66,7 +66,7 @@ function votefunction() {
 
 
     }
-  })ffff
+  })
 
   // // Handling vote
   // if (yes) {
