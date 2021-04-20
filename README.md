@@ -14,3 +14,7 @@ Feel free to submit a pull request if you would like to make some meaningful cha
 - Backend communicates with MongoDB database to pull all previous votes.
 - Live updating is accomplished with Pusher.js
 - Cookie saved to local storage meaning you can't vote again.
+- Buttons are then disabled meaning you can't revote
+
+## Issues ☹️
+- If you encounter any issues please do not hesitate to sumbit an [issue](https://github.com/ovandenbosch/voting-site/issues).
